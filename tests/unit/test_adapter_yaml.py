@@ -1016,3 +1016,27 @@ class TestYamlAdapter:
         result = fix_code(source, config)
 
         assert result == fixed_source
+
+    @pytest.mark.parametrize("quote_representation", quote_representations)
+    def test_quote_values_without_quote_basic_values(
+        self, quote_representation: str
+    ) -> None:
+        """Quote only scalar values with configurable quote representation."""
+        source = dedent(
+            """\
+            port: '80'
+            """
+        )
+        quote = quote_representation
+        fixed_source = dedent(
+            f"""\
+            ---
+            port: {quote}80{quote}
+            """
+        )
+        config = YamlfixConfig()
+        config.quote_representation = quote_representation
+
+        result = fix_code(source, config)
+
+        assert result == fixed_source

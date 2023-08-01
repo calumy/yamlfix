@@ -154,7 +154,9 @@ class YamlfixRepresenter(RoundTripRepresenter):
         log.debug("Setting up ruamel yaml 'quote simple values' configuration...")
 
         def patch_quotations(key_node: Node, value_node: Node) -> None:  # noqa: W0613
-            if not config.quote_basic_values or config.quote_representation is None:
+            if (
+                not config.quote_basic_values and config.quote_representation == "'"
+            ) or config.quote_representation is None:
                 return
 
             # if this is a scalar value node itself, apply the quotations now
